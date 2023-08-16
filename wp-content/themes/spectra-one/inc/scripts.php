@@ -42,9 +42,14 @@ function enqueue_frontend_scripts(): void {
 	}
 
 	/* Load Theme Styles*/
-	wp_enqueue_style( SWT_SLUG, $css_uri . '/style' . $file_prefix . '.css', array(), SWT_VER );
+	wp_enqueue_style( SWT_SLUG, $css_uri . 'style' . $file_prefix . '.css', array(), SWT_VER );
 
-	wp_enqueue_style( SWT_SLUG . '-gutenberg', $css_uri . '/gutenberg' . $file_prefix . '.css', array(), SWT_VER );
+	/** @psalm-suppress UndefinedFunction */ // phpcs:ignore PossiblyFalseArgument, Generic.Commenting.DocComment.MissingShort -- Function exist in helpers.php
+	if ( wp_version_compare( '6.2.99', '<=' ) ) {
+		wp_enqueue_style( SWT_SLUG . '-duotone', $css_uri . 'compatibility/duotone' . $file_prefix . '.css', array(), SWT_VER );
+	}
+
+	wp_enqueue_style( SWT_SLUG . '-gutenberg', $css_uri . 'gutenberg' . $file_prefix . '.css', array(), SWT_VER );
 
 	$swt_inline_css = apply_filters( 'swt_dynamic_theme_css', '' );
 	if ( $swt_inline_css ) {
@@ -53,7 +58,7 @@ function enqueue_frontend_scripts(): void {
 
 	/* Load Woocommerce Styles */
 	if ( class_exists( 'WooCommerce' ) ) {
-		wp_enqueue_style( SWT_SLUG . '-woocommerce', $css_uri . '/compatibility/woocommerce' . $file_prefix . '.css', array(), SWT_VER );
+		wp_enqueue_style( SWT_SLUG . '-woocommerce', $css_uri . 'compatibility/woocommerce' . $file_prefix . '.css', array(), SWT_VER );
 	}
 
 	/* Load Theme Scripts*/
@@ -99,7 +104,7 @@ function enqueue_editor_scripts(): void {
 	$deps  = $asset['dependencies'];    
 	array_push( $deps, 'updates' );
 	
-	wp_enqueue_style( SWT_SLUG . '-gutenberg-editor', $css_uri . '/gutenberg-editor' . $file_prefix . '.css', array(), SWT_VER );
+	wp_enqueue_style( SWT_SLUG . '-gutenberg-editor', $css_uri . 'gutenberg-editor' . $file_prefix . '.css', array(), SWT_VER );
 
 	wp_register_script( SWT_SLUG . '-editor', $js . 'editor.js', $deps, SWT_VER, true );
 
@@ -133,6 +138,7 @@ function localize_editor_script() {
 			'disable_sections'  => get_disable_section_fields(),
 			'pluginStatus'      => is_spectra_plugin_status(),
 			'pluginSlug'        => 'ultimate-addons-for-gutenberg',
+			'nonce'				=> wp_create_nonce( 'wp_rest' ),
 			'activationUrl'     => esc_url(
 				add_query_arg(
 					array(
@@ -156,7 +162,7 @@ function localize_editor_script() {
  *
  * @return void
  */
-function enqueue_editor_block_styles() {
+function enqueue_editor_block_styles(): void {
 
 	// Disable Core Block Patterns.
 	remove_theme_support( 'core-block-patterns' );
@@ -170,9 +176,15 @@ function enqueue_editor_block_styles() {
 	add_theme_support( 'wp-block-styles' );
 
 	// Enqueue editor styles.
+	/** @psalm-suppress UndefinedFunction */ // phpcs:ignore PossiblyFalseArgument, Generic.Commenting.DocComment.MissingShort -- Function exist in helpers.php
+	if ( wp_version_compare( '6.2.99', '<=' ) ) {
+		add_editor_style( $css_uri . 'compatibility/duotone' . $file_prefix . '.css' );
+	}
+
 	add_editor_style( $css_uri . 'editor' . $file_prefix . '.css' );
 
 	add_editor_style( $css_uri . 'gutenberg' . $file_prefix . '.css' );
+
 }
 
 add_action( 'after_setup_theme', SWT_NS . 'enqueue_editor_block_styles' );
@@ -184,7 +196,7 @@ add_action( 'after_setup_theme', SWT_NS . 'enqueue_editor_block_styles' );
  *
  * @return void
  */
-function spectra_one_setup() {
+function spectra_one_setup(): void {
 	/*
 	* Make theme available for translation.
 	* Translations can be filed at WordPress.org. See: https://translate.wordpress.org/projects/wp-themes/twentyfifteen
@@ -195,3 +207,33 @@ function spectra_one_setup() {
 }
 
 add_action( 'after_setup_theme', SWT_NS . 'spectra_one_setup' );
+
+
+
+/**
+ * Pattern categories.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function pattern_categories(): void {
+
+	register_block_pattern_category(
+		'pages',
+		array( 'label' => esc_html__( 'Pages', 'spectra-one' ) )
+	);
+
+	register_block_pattern_category(
+		'contact',
+		array( 'label' => esc_html__( 'Contact', 'spectra-one' ) )
+	);
+
+	register_block_pattern_category(
+		'pricing',
+		array( 'label' => esc_html__( 'Pricing', 'spectra-one' ) )
+	);
+
+}
+
+add_action( 'init', SWT_NS . 'pattern_categories' );

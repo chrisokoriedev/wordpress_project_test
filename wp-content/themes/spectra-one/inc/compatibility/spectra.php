@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Swt;
 
-use function UAGB_Admin_Helper;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -20,6 +18,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_filter( 'wp', SWT_NS . 'spectra_compatibility', 10, 2 );
 
+// @codingStandardsIgnoreStart
+/**
+ * @psalm-suppress MissingClosureParamType
+ */
+add_filter( 'uagb_default_blocks_editor_spacing', function( $spacing ) {
+	return $spacing > 15 ? $spacing : 15;
+});
+/**
+ * @psalm-suppress MissingClosureParamType
+ */
 
 /**
  * Spectra compatibility

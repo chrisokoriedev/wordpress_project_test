@@ -330,3 +330,57 @@ function css_string_to_array( string $css ): array {
 
 
 
+
+/**
+ * Check if page title is enabled or disabled.
+ *
+ * @since 1.0.0
+ * @param int $post_id Post id.
+ * @return bool
+ */
+function is_page_title( int $post_id = 0 ): bool {
+	$get_check_title = get_post_meta( $post_id, '_swt_meta_site_title_display', true );
+	$check_meta      = $get_check_title ? true : false;
+
+	return ! is_admin() && is_singular() && boolval( $check_meta ) && ! in_the_loop();
+}
+
+
+/**
+ * Get an SVG Icon
+ *
+ * @since 1.0.2
+ * @param string $icon the icon name.
+ * @param string $class extra classes.
+ * @param bool   $base if the baseline class should be added.
+ * @return string
+ */
+function fetch_svg_icon( string $icon = '', string $class = '', bool $base = true ) :string {
+	$swt_svgs = null;
+	$output   = '<span class="swt-svg' . ( $base ? ' svg-baseline' : '' ) . ( $class ? ' ' . $class : '' ) . '">';
+
+	ob_start();
+	echo file_get_contents( SWT_DIR . 'assets/svg/svgs.json' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Required to get svg.json.
+	$swt_svgs = json_decode( ob_get_clean(), true );
+	$swt_svgs = apply_filters( 'swt_svg_icons', $swt_svgs );
+
+	$output .= isset( $swt_svgs[ $icon ] ) ? $swt_svgs[ $icon ] : '';
+	
+	$output .= '</span>';
+
+	return $output;
+}
+
+/**
+ * Check the WordPress version.
+ *
+ * @since  1.0.4
+ * @param string $version   WordPress version to compare with the current version.
+ * @param mixed  $compare   Comparison value i.e > or < etc.
+ * @return bool|null            True/False based on the  $version and $compare value.
+ */
+function wp_version_compare( $version, $compare ) {
+	global $wp_version;
+	list( $current_version ) = explode( '-', $wp_version );
+	return version_compare( $current_version, $version, $compare );
+}

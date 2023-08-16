@@ -7,23 +7,13 @@
       "palette": [
         {
           "name": "Primary",
-          "color": "#1F5AFF",
+          "color": "#286DF6",
           "slug": "primary"
         },
         {
           "name": "Secondary",
-          "color": "#3369FF",
+          "color": "#3979F9",
           "slug": "secondary"
-        },
-        {
-          "name": "Tertiary",
-          "color": "#FFFFFF",
-          "slug": "tertiary"
-        },
-        {
-          "name": "Quaternary",
-          "color": "#FFFFFF",
-          "slug": "quaternary"
         },
         {
           "name": "Heading",
@@ -36,14 +26,29 @@
           "slug": "body"
         },
         {
-          "name": "Surface",
+          "name": "Background",
+          "color": "#F8FAFC",
+          "slug": "background"
+        },
+        {
+          "name": "Tertiary",
           "color": "#FFFFFF",
+          "slug": "tertiary"
+        },
+        {
+          "name": "Quaternary",
+          "color": "#FEFEFE",
+          "slug": "quaternary"
+        },
+        {
+          "name": "Surface",
+          "color": "#FDFDFD",
           "slug": "surface"
         },
         {
-          "name": "Background",
-          "color": "#FBFBFD",
-          "slug": "background"
+          "name": "Foreground",
+          "color": "#286DF6",
+          "slug": "foreground"
         },
         {
           "name": "Outline",
@@ -52,7 +57,7 @@
         },
         {
           "name": "Neutral",
-          "color": "#9CA3AF",
+          "color": "#6E7787",
           "slug": "neutral"
         },
         {
@@ -71,11 +76,18 @@
           "slug": "inherit"
         }
       ],
+      "gradients": [
+				{
+					"slug": "primary",
+					"gradient": "linear-gradient(286.83deg, #0ABEEB -1.55%, #0F26F7 100%)",
+					"name": "Primary"
+				}
+      ],
       "duotone": [
         {
           "colors": [
-            "#1F5AFF",
-            "#1F5AFF"
+            "#286DF6",
+            "#286DF6"
           ],
           "slug": "primary",
           "name": "Primary"
@@ -83,10 +95,18 @@
         {
           "colors": [
             "#1F2937",
-            "#1F2937"
+            "#1F2937" 
           ],
           "slug": "secondary",
           "name": "Secondary"
+        },
+        {
+          "colors": [
+            "#F8FAFC",
+            "#F8FAFC"
+          ],
+          "slug": "tertiary",
+          "name": "Tertiary"
         }
       ]
     }
